@@ -140,8 +140,26 @@ i.b-f { --bg: var(--ansi-BrightWhite); }
 /*********** GENERIC STUFF *************/
 
 html {
-    font-size: 100%;
+    /* font-size: 100%; */
+    /* font-size: max(62.5%, 2.2vmin); */
     box-sizing: border-box;
+
+    /*
+    The terminal is 27 em tall (25 lines at 1em + 1m padding-block),
+    and 82 characters wide (80 columns + 1ch padding-inline),
+    which in this font is 32,8em
+
+    100vh / 27 = 3.7037037037 vh
+    100vw / 32.8 = 3.0487804878 vw
+    max size based on height = 3,7037037037 vh
+    max size based on width = 3,0487804878 vw
+
+    truncated:
+    3.04vw
+    3.7vh
+    */
+    /* Fit on screen but no smaller than 10px font-size */
+    font-size: max(10px, min(3.04vw, 3.7vh));
 }
 
 img {
@@ -189,8 +207,9 @@ a {
 /*********** PARTS OF THE SCREEN *************/
 
 .monitor {
-    margin: 16px auto;
-    padding: 16px;
+    margin: 0 auto;
+    height: 100%;
+    /* padding: 16px; */
     width: min-content;
     display: flex;
     flex-direction: column;
@@ -213,8 +232,9 @@ pre {
 .crt {
     min-width: 84ch;
     /* This makes 80 monospace characters fit on the screen */
-    height: calc(80ch * 0.8);
-    font-size: max(1rem, 2.2vmin);
+    /* height: calc(80ch * 0.8); */
+    height: 100%;
+
     /* Scale the font-size relative to the minimum screen dimension */
     position: relative;
     background: var(--bg);
@@ -274,7 +294,7 @@ pre {
 }
 
 body.fullscreen .crt {
-    font-size: 2.5rem;
+    /* font-size: 2.5rem; */
     position: fixed;
     width: 100%;
     left: 0;
@@ -300,7 +320,7 @@ body.fullscreen .crt {
 .terminal {
     position: relative;
     height: 100%;
-    padding: 1ch;
+    padding: 1em 1ch;
     word-break: break-word;
     /* text-transform: uppercase; */
     /* animation: textShadow 4s infinite; */

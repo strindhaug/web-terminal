@@ -1,7 +1,11 @@
 # web-terminal
 A silly hobby project of simulating an terminal OS with apps in a browser
 
-## How to run:
+You can now see it here:
+https://strindhaug.github.io/web-terminal/
+
+
+## How to run locally:
 
 Clone this repo locally
 

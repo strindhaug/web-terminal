@@ -340,11 +340,11 @@ bye [time]      alias for shutdown`
                 return // don't sync output
             case "shutdown":
             case "bye":
+                clearTimeout(shutdownTimeout)
                 await pause(0.2)
-
                 if (args.length > 1) {
                     if (args[1] === "abort" || args[1] === "cancel") {
-                        clearTimeout(shutdownTimeout)
+                        // Note we've already cancelled the timer above
                         await writeLine(`Broadcast message from root (pts/0) (${new Date().toUTCString()}):`)
                         await writeLine("Shutdown cancelled")
                     }
