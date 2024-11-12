@@ -1,0 +1,429 @@
+/*
+ * Terminal effects:
+ * Scanlines/flicker: 	http://aleclownes.com/2017/02/01/crt-display.html
+ * Screen turn-off:		https://codepen.io/lbebber/pen/XJRdrV
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1+Code:wght@100..700&family=VT323&display=swap');
+
+
+:root {
+    --green-color: #5bf870;
+    --green-bg: #05321e;
+    --red-color: #c0100a;
+    --red-bg: #1b0302;
+    --blue-color: #a5a5ff;
+    --blue-bg: #4242e7;
+    --off: #050505;
+    --dark: #111;
+    --term: "> ";
+    --color: var(--green-color);
+    --bg: var(--green-bg);
+
+    --ansi-Black: rgb(12, 12, 12);
+    --ansi-Red: rgb(170, 0, 0);
+    --ansi-Green: rgb(0, 141, 0);
+    --ansi-Yellow: rgb(170, 85, 0);
+    --ansi-Blue: rgb(0, 0, 170	);
+    --ansi-Magenta: rgb(170, 0, 170);
+    --ansi-Cyan: rgb(0, 170, 170);
+    --ansi-White: rgb(170, 170, 170);
+    --ansi-BrightBlack: rgb(85, 85, 85);
+    --ansi-BrightRed: rgb(255, 85, 85);
+    --ansi-BrightGreen: rgb(85, 255, 85);
+    --ansi-BrightYellow: rgb(255, 255, 85);
+    --ansi-BrightBlue: rgb(85, 85, 255);
+    --ansi-BrightMagenta: rgb(255, 85, 255);
+    --ansi-BrightCyan: rgb(85, 255, 255);
+    --ansi-BrightWhite: rgb(255, 255, 255);
+
+    --px2: 0.1666666667em;
+    --px: 0.0833333333em;
+
+}
+i {
+  font-style: normal;
+  --fg: var(--ansi-BrightGreen);
+  --bg: transparent;
+  color: var(--fg);
+  background-color: var(--bg);
+}
+i.cursor {
+  --fg: var(--ansi-BrightGreen);
+  --bg: var(--ansi-Black);
+  /* outline: 2px solid var(--fg);
+  outline-offset: -2px; */
+  /* color: var(--fg); */
+  /* background-color: var(--bg); */
+  color: var(--bg);
+  outline-width: 0;
+  background-color: var(--fg);
+}
+
+input:focus + .crt i.cursor {
+  animation: bgFlash 1s infinite;
+  animation-timing-function: step-end;
+}
+
+@keyframes bgFlash {
+  0% {
+    color: var(--bg);
+    background-color: var(--fg);
+  }
+
+  25% {
+    color: var(--fg);
+    background-color: var(--bg);
+  }
+
+  75% {
+    color: var(--bg);
+    background-color: var(--fg);
+  }
+
+  100% {
+    color: var(--bg);
+    background-color: var(--fg);
+  }
+}
+
+@keyframes throb {
+  0% {
+    color:
+  }
+
+
+  80% {
+    opacity: 0.1;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+i.c-0 { --fg: var(--ansi-Black); }
+i.c-1 { --fg: var(--ansi-Red); }
+i.c-2 { --fg: var(--ansi-Green); }
+i.c-3 { --fg: var(--ansi-Yellow); }
+i.c-4 { --fg: var(--ansi-Blue); }
+i.c-5 { --fg: var(--ansi-Magenta); }
+i.c-6 { --fg: var(--ansi-Cyan); }
+i.c-7 { --fg: var(--ansi-White); }
+i.c-8 { --fg: var(--ansi-BrightBlack); }
+i.c-9 { --fg: var(--ansi-BrightRed); }
+i.c-a { --fg: var(--ansi-BrightGreen); }
+i.c-b { --fg: var(--ansi-BrightYellow); }
+i.c-c { --fg: var(--ansi-BrightBlue); }
+i.c-d { --fg: var(--ansi-BrightMagenta); }
+i.c-e { --fg: var(--ansi-BrightCyan); }
+i.c-f { --fg: var(--ansi-BrightWhite); }
+
+
+i.b-0 { --bg: var(--ansi-Black); }
+i.b-1 { --bg: var(--ansi-Red); }
+i.b-2 { --bg: var(--ansi-Green); }
+i.b-3 { --bg: var(--ansi-Yellow); }
+i.b-4 { --bg: var(--ansi-Blue); }
+i.b-5 { --bg: var(--ansi-Magenta); }
+i.b-6 { --bg: var(--ansi-Cyan); }
+i.b-7 { --bg: var(--ansi-White); }
+i.b-8 { --bg: var(--ansi-BrightBlack); }
+i.b-9 { --bg: var(--ansi-BrightRed); }
+i.b-a { --bg: var(--ansi-BrightGreen); }
+i.b-b { --bg: var(--ansi-BrightYellow); }
+i.b-c { --bg: var(--ansi-BrightBlue); }
+i.b-d { --bg: var(--ansi-BrightMagenta); }
+i.b-e { --bg: var(--ansi-BrightCyan); }
+i.b-f { --bg: var(--ansi-BrightWhite); }
+
+/*********** GENERIC STUFF *************/
+
+html {
+    font-size: 100%;
+    box-sizing: border-box;
+}
+
+img {
+    image-rendering: pixelated;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+body {
+    background: #000;
+    margin: 0;
+    cursor: none;
+}
+
+body.controls--show {
+    cursor: pointer;
+}
+
+a {
+    outline: none;
+}
+
+/*********** INPUT / OUTPUT *************/
+
+/* #input[contenteditable="true"]:after,
+.typer.active:after {
+    content: "■";
+    animation: cursor 1s infinite;
+    animation-timing-function: step-end;
+    margin-left: 1px;
+    line-height: 1rem;
+} */
+
+.typer {
+    word-break: break-all;
+    white-space: pre-wrap;
+    line-height: 1;
+}
+
+
+/*********** PARTS OF THE SCREEN *************/
+
+.monitor {
+    margin: 16px auto;
+    padding: 16px;
+    width: min-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* background: #808080; */
+}
+
+.screen {
+    position: relative;
+    overflow: hidden;
+}
+
+/* The screen itself + border */
+.crt,
+pre {
+    font-family: "VT323", monospace;
+
+}
+
+.crt {
+    min-width: 84ch;
+    /* This makes 80 monospace characters fit on the screen */
+    height: calc(80ch * 0.8);
+    font-size: max(1rem, 2.2vmin);
+    /* Scale the font-size relative to the minimum screen dimension */
+    position: relative;
+    background: var(--bg);
+    background-image: radial-gradient(ellipse, var(--bg) 0%, var(--off) 90%);
+    animation: on 2s linear;
+    transition: all 0.5s;
+    overflow: hidden;
+}
+
+.crt:after {
+    content: " ";
+    opacity: 0;
+    background: #fff;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.monitor.monitor--turn-off .crt:after {
+    animation: turnOff 0.4s ease-in-out;
+    /* animation-fill-mode: forwards; */
+}
+
+.monitor:not(.monitor--off) .crt:before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.25) 25%, rgba(18, 16, 16, 0.1) 25%, rgba(18, 16, 16, 0.1) 50%, rgba(0, 0, 0, 0.25) 50%, rgba(0, 0, 0, 0.25) 75%, rgba(18, 16, 16, 0.1) 75%, rgba(18, 16, 16, 0.1) 100%);
+    background-size: 100% 0.1666666667em;
+    z-index: 2;
+    pointer-events: none;
+    animation: fadeIn 2s;
+}
+
+/* Screen turned off */
+.monitor.monitor--off .crt {
+    background: var(--off);
+}
+
+.monitor.monitor--off .crt:before {
+    background: none;
+}
+
+.monitor.monitor--off .crt * {
+    display: none !important;
+}
+
+body.fullscreen .crt {
+    font-size: 2.5rem;
+    position: fixed;
+    width: 100%;
+    left: 0;
+    top: 0;
+    z-index: 99;
+}
+
+.fullscreen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.hidden {
+  opacity: 0;
+}
+
+.terminal {
+    position: relative;
+    height: 100%;
+    padding: 1ch;
+    word-break: break-word;
+    /* text-transform: uppercase; */
+    /* animation: textShadow 4s infinite; */
+    max-width: 82ch;
+}
+.matrix-terminal {
+    font-family: "M PLUS 1 Code", monospace;
+    font-size: 75%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: row;
+    max-width: 100vw;
+    max-height: 100vh;
+    overflow: hidden;
+    justify-content: space-around;
+}
+.matrix-col {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  /* outline: 1px solid pink; */
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  --parallax: 0vw;
+  transform: translateX(0);
+  opacity: 1;
+  animation: matrixZoom 40s ease-in-out infinite;
+}
+
+@keyframes matrixZoom {
+  0% {
+    opacity: 0;
+    transform: translateX(0vw);
+    zoom: 0.9;
+  }
+  5% {
+    opacity: 1;
+    transform: translateX(0vw);
+    zoom: 0.9;
+  }
+
+  95% {
+    opacity: 1;
+    transform: translateX(var(--parallax));
+    zoom: 1.2;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(var(--parallax));
+    zoom: 1.2;
+  }
+}
+
+
+
+.matrix-el {
+  height: 1.2em;
+  max-height: 1.2em;
+  overflow: visible;
+  opacity: 0;
+}
+.matrix-el--flash {
+  opacity: 1;
+  color: var(--ansi-BrightWhite);
+  text-shadow: 0 0 1em var(--ansi-BrightGreen);
+}
+.matrix-el--glow {
+    animation: afterglow 2.5s linear;
+
+}
+
+
+@keyframes afterglow {
+  0% {
+    opacity: 1;
+  }
+  20% {
+    opacity: 0.8;
+  }
+
+  50% {
+    opacity: 0.56;
+  }
+
+  80% {
+    opacity: 0.1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+
+.terminal,
+.fullscreen {
+    color: var(--color);
+    text-shadow: 0 0 5px #c8c8c8;
+}
+
+::selection {
+    background: var(--color);
+    color: var(--bg);
+    text-shadow: none;
+}
+
+/* Scanline moving top to bottom over the screen */
+.scanline {
+    width: 100%;
+    height: 100px;
+    z-index: 8;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(255, 255, 255, 0.2) 10%, rgba(0, 0, 0, 0.1) 100%);
+    opacity: 0.1;
+    position: absolute;
+    bottom: 100%;
+    pointer-events: none;
+    animation: scanline 10s linear infinite;
+}
