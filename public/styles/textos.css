@@ -240,7 +240,7 @@ pre {
     background: var(--bg);
     background-image: radial-gradient(ellipse, var(--bg) 0%, var(--off) 90%);
     animation: on 2s linear;
-    transition: all 0.5s;
+    /* transition: all 0.5s; */
     overflow: hidden;
 }
 
@@ -273,8 +273,12 @@ pre {
     left: 0;
     bottom: 0;
     right: 0;
+    background-image: repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(18, 16, 16, 0.1) 5%, rgba(18, 16, 16, 0.1) 7%, rgba(0, 0, 0, 0.35) 9%);
+    background-size: 100% 1em;
+    /*
     background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.25) 25%, rgba(18, 16, 16, 0.1) 25%, rgba(18, 16, 16, 0.1) 50%, rgba(0, 0, 0, 0.25) 50%, rgba(0, 0, 0, 0.25) 75%, rgba(18, 16, 16, 0.1) 75%, rgba(18, 16, 16, 0.1) 100%);
     background-size: 100% 0.1666666667em;
+    */
     z-index: 2;
     pointer-events: none;
     animation: fadeIn 2s;
