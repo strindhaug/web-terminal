@@ -4,7 +4,6 @@ A silly hobby project of simulating an terminal OS with apps in a browser
 You can now see it here:
 https://strindhaug.github.io/web-terminal/
 
-
 ## How to run locally:
 
 Clone this repo locally
@@ -28,7 +27,6 @@ Just try typing stuff. If you type an invalid command it will hint about the
 
 Currently the most complete application is the `matrix` and the man page for
 said command.
-
 
 ## Development:
 

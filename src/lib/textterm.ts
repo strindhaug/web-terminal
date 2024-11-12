@@ -57,6 +57,13 @@ export function bgColorMap(colorName: string | undefined): string {
 
 // type CallBack = () => Promise<any>
 
+enum OutputSlowness {
+    Instant = 0,
+    Lines = 1,
+    Chars = 2,
+    Stutter = 3,
+}
+
 export interface SubProgram {
     keyUpListener: (ev: KeyboardEvent) => any | undefined
     keyDownListener: (ev: KeyboardEvent) => any | undefined
@@ -128,6 +135,7 @@ export function getTerminalPrompt(promptEl: HTMLInputElement, llBuf: LowLevelScr
     let keydownRepeating: number
 
     let shutdownTimeout: number
+    let outputActive: boolean = false
 
     async function handleReturn() {
         const c = llBuf.getCursor()
@@ -150,7 +158,8 @@ export function getTerminalPrompt(promptEl: HTMLInputElement, llBuf: LowLevelScr
         llBuf.setCursor(0, 0)
     }
 
-    async function writeLine(text: string, returnFirst: boolean = true, slow: boolean = true) {
+    async function writeLine(text: string, returnFirst: boolean = true, slowness: OutputSlowness = OutputSlowness.Stutter) {
+        outputActive = true
         let c = llBuf.getCursor()
         if (returnFirst) {
             handleReturn()
@@ -177,15 +186,28 @@ export function getTerminalPrompt(promptEl: HTMLInputElement, llBuf: LowLevelScr
                     handleReturn()
                 }
             }
-
-            // cb = llBuf.getCursor()
-            if (slow) {
-                llBuf.updateScreen()
-                await pause(0.02)
+            switch (slowness) {
+                case OutputSlowness.Lines:
+                    if (ch === "\n") {
+                        llBuf.updateScreen()
+                        await pause(0.1)
+                    }
+                    break
+                case OutputSlowness.Chars:
+                    llBuf.updateScreen()
+                    await pause(0.01)
+                    break
+                case OutputSlowness.Stutter:
+                    llBuf.updateScreen()
+                    await pause(Math.random() * 0.035)
+                    break
+                default:
+                    // don't wait
             }
         }
         // handleReturn()
         llBuf.updateScreen()
+        outputActive = false
     }
     function startPrompt() {
         promptEl.value = ""
@@ -230,14 +252,14 @@ export function getTerminalPrompt(promptEl: HTMLInputElement, llBuf: LowLevelScr
     }
 
     async function completeShutdown() {
-        await writeLine(`Broadcast message from root (pts/0) (${new Date().toUTCString()}):\n\n`)
-        await writeLine("The system is going to shut down NOW!")
+        await writeLine(`Broadcast message from root (pts/0) (${new Date().toUTCString()}):\n\n`, true, OutputSlowness.Chars)
+        await writeLine("The system is going to shut down NOW!\n", true, OutputSlowness.Chars)
         await pause(0.5)
-        await writeLine("Sending SIGTERM to all processes")
+        await writeLine("Sending SIGTERM to all processes\n")
         await pause(1.9)
-        await writeLine("Sending SIGKILL to all processes")
+        await writeLine("Sending SIGKILL to all processes\n", false)
         await pause(0.8)
-        await writeLine("Requesting system halt ...")
+        await writeLine("\nRequesting system halt ...\n")
         await pause(3)
         await power(false)
     }
@@ -266,7 +288,7 @@ export function getTerminalPrompt(promptEl: HTMLInputElement, llBuf: LowLevelScr
         else {
             const rawCommand = promptEl.value
             const sanitised = rawCommand.trim().toLowerCase()
-            if (sanitised.length < autoCompleteMinLength){
+            if (sanitised.length < autoCompleteMinLength) {
                 return
             }
             currTabCompletions = availableCommands.filter(c => c.startsWith(sanitised))
@@ -320,7 +342,8 @@ bye [time]      alias for shutdown`
             case "help":
                 await pause(0.2)
                 await writeLine("Available commands", false)
-                await writeLine(allCommands)
+                await pause(0.3)
+                await writeLine(allCommands, true, OutputSlowness.Lines)
                 await writeLine("")
                 await handleReturn()
                 break
@@ -389,6 +412,9 @@ bye [time]      alias for shutdown`
     }
 
     async function syncUserInput() {
+        if (outputActive) {
+            return
+        }
         const c = llBuf.getCursor()
         const updatedCurrentLine = `${promptSym}${promptEl.value}`
         for (let i = 0; i < screenCols; i++) {
@@ -430,7 +456,7 @@ bye [time]      alias for shutdown`
         if (runningApps.length > 0) {
             return
         }
-        console.debug("ev.code", ev.code)
+        // console.debug("ev.code", ev.code)
         switch (ev.code) {
             case "Enter":
                 handleEntry()

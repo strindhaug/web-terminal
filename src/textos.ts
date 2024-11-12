@@ -22,7 +22,7 @@ async function onLoad() {
     wrapperEl.classList.add("typer")
 
     const promptEl = document.createElement("input")
-
+    promptEl.autocomplete = "off"
     promptEl.style.opacity = "0.0001"
     promptEl.type = "text"
     promptEl.name = "promptEl"
