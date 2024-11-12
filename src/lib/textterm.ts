@@ -242,6 +242,41 @@ export function getTerminalPrompt(promptEl: HTMLInputElement, llBuf: LowLevelScr
         await power(false)
     }
 
+    // TODO move commands and command parsing to command parser lib
+    // use a map to avoid having inconsistent data
+    const availableCommands = [
+        "bye",
+        "clear",
+        "cls",
+        "hello",
+        "help",
+        "man",
+        "matrix",
+        "pager",
+        "shutdown",
+    ]
+    let tabCompI: number
+    let currTabCompletions: string[]
+    const autoCompleteMinLength = 1 // increase to 2 if it gets annoying with too many suggestions
+
+    async function tryAutoComplete() {
+        if (currTabCompletions.length > 0) {
+            tabCompI = (1 + tabCompI) % currTabCompletions.length
+        }
+        else {
+            const rawCommand = promptEl.value
+            const sanitised = rawCommand.trim().toLowerCase()
+            if (sanitised.length < autoCompleteMinLength){
+                return
+            }
+            currTabCompletions = availableCommands.filter(c => c.startsWith(sanitised))
+            currTabCompletions.push(rawCommand)
+            tabCompI = 0
+        }
+        promptEl.value = currTabCompletions[tabCompI]
+        syncUserInput()
+    }
+
     async function handleEntry() {
         handleReturn()
         const rawCommand = promptEl.value
@@ -370,6 +405,17 @@ bye [time]      alias for shutdown`
             // dom.graphicalRenderer.stopWriting()
             // stopSpeaking()
         }
+        if (ev.code === "Tab") {
+            tryAutoComplete()
+            ev.preventDefault()
+            ev.stopPropagation()
+        }
+        else {
+            // For any other keypresses reset the suggestions
+            // to start a new tab completion on next tab press.
+            currTabCompletions = []
+        }
+
         if (runningApps.length > 0) {
             return
         }
@@ -384,6 +430,7 @@ bye [time]      alias for shutdown`
         if (runningApps.length > 0) {
             return
         }
+        console.debug("ev.code", ev.code)
         switch (ev.code) {
             case "Enter":
                 handleEntry()
