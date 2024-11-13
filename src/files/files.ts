@@ -6,55 +6,98 @@ export interface ManPageData {
 
 const manpage_matrix_text = `
 NAME
-       matrix - watch the raw feed of The Matrix
+    matrix - watch the raw feed of The Matrix
 
 SYNOPSIS
-       matrix
-            default: Show the feed in the full character set
+    matrix
+        With no options this will emulate the look of the movie
+        as closely as possible with mirrored katakana and numbers.
 
-       matrix --hex
-            hexadecimal: some operators find this more comfortable
-
-       matrix --ascii
-            only latin characters: for monolingual americans
-
-       matrix --binary
-            raw binary feed: most suitable for droids
+    matrix [-abfhjnu]
+        See the OPTIONS section for details and
+        alternate option syntax with long option names.
 
 DESCRIPTION
-       Because the matrix feed is very dense this terminal only shows a
-       tiny slice of the full feed in order to not overwhelm the
-       operator. This program uses a heuristic to filter out and show
-       only the most important streams, and it will suppress most
-       "blips" (inline code mutations) that it deems irrelevant to the
-       current mission.
+    Because the matrix feed is very dense this terminal only shows a
+    tiny slice of the full feed in order to not overwhelm the
+    operator. This program uses a heuristic to filter out and show
+    only the most important streams, and it will suppress most
+    "blips" (inline code mutations) that it deems irrelevant to the
+    current mission.
 
-       But the operator may of course change the agressiveness of the
-       heuristic to show more or less information at once as needed with
-       these controls.
+    But the operator may of course change the agressiveness of the
+    heuristic to show more or less information at once as needed with
+    these controls.
 
 COMMANDS
-       These are the command inputs that are available during execution
+    These are the command inputs that are available during execution
 
-       INFORMATION SPEED CONTROLS:
+    INFORMATION SPEED CONTROLS:
 
-       Q           Quit, disconnect from the feed and return to terminal
-       P           pause feed
-       R           resume feed
-       SPACE       step through feed while paused
+    Q           Quit, disconnect from the feed and return to terminal
+    P           pause feed
+    R           resume feed
+    SPACE       step through feed while paused
 
-       Up arrow    More simultaneous feeds
-       Down arrow  Fewer simultaneous feeds
-       Right arrow More blips
-       Left arrow  Fewer blips
+    Up arrow    More simultaneous feeds
+    Down arrow  Fewer simultaneous feeds
+    Right arrow More blips
+    Left arrow  Fewer blips
 
-       ENCODING CONTROLS:
 
-       D    Default full charset
-       A    ASCII
-       N/J  Nihongo (Japanese)
-       H    Hexadecimal
-       B    Binary
+    ENCODING CONTROLS:
+    (See descriptions of the various encodings in the OPTIONS section below)
+
+    A    ASCII
+    F    Full Base256 charset
+    N/J  Nihongo (Japanese)
+    U    Ukraine
+    H    Hexadecimal
+    B    Binary
+
+    D    Default movie charset
+    M    Toggle letter mirroring
+
+
+
+
+OPTIONS
+    These are the command line options available. All these options can
+    be changed during runtime with the commands above.
+    (no options)
+        Original The Matrix encoding with a small set of mirrored half
+        width katakana characters (and one kanji) and arabic numerals and
+        the letter Z and ç and some punctuation.
+
+    -f  or  --full
+        full encoding: uses a character set consisting of several symbols
+        letters and numbers mainly from Latin scripts and Japanese. Note
+        the symbols themselves are actually not meaningful, it's just
+        arbitrary symbols chosen by the Japanese developers as symbols in
+        a Base256 encoding.
+
+    -h  or  --hex
+        hexadecimal: Use hexadecimal character encoding. Some older
+        operators tend to find this more comfortable
+
+    -b  or --binary
+        Binary encoding. Most suitable for androids.
+
+    -a  or  --ascii  or  --american
+        Use only ASCII characters (i.e. latin letters and numbers and
+        symbols). Preferred by monolingual Americans.
+
+    -n  or  --nihongo
+        Use only japanese characters (and arabic numerals).
+        Interestingly also preferred by some other monolingual Americans.
+        Some say not being able to read the characters help them focus,
+        others just think it looks cool.
+
+    -j  or  --japanese
+        Alias for -n
+
+    -u  or  --ukraine
+        Ukraine cyrillic
 `
 
 const manPages: { [key: string]: ManPageData } = {

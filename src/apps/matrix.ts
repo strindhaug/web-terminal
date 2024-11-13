@@ -6,14 +6,18 @@ interface Coordinate {
     ttl: number
 }
 
-export function getMatrixRain(wrapper: HTMLDivElement, initArg?: string, streams: number = 40, charPerStream: number = 30): SubProgram {
-    const FullCset = " _@^[]{}()+abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890?!｡｢｣､･ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝﾝﾝｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅ "
-    const Japanese = " _@^[]{}()+1234567890?!｡｢｣､･ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝﾝﾝｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅ "
-    const American = " _@^[]{}()+abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890?!"
-    const HexCset = "0000123456789ABCDEFFF"
-    const Binary = "01010101010101010101010101010101010101010101010120101"
+export function getMatrixRain(wrapper: HTMLDivElement, initArg?: string, streams: number = 40, charPerStream: number = 35): SubProgram {
+    const MovieCharset = `"*+-.0123456789:<=>Zç¦╌日ｦｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾜﾝ`
+    const Base256 = "!#%&()*+0123456789=?§@AÅÆBCDEFGHIJKLMNOØPQRSTUVWXYZ[]^_aåæbcçdefghijklmnoøpqrstuvwxyz{|}~ŋŠšɕɯɲɴɸʑẽ∞あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわゑをㇰㇱㇲㇳㇴㇵㇶㇷㇸㇹㇺㇻㇼㇽㇾㇿ上二于作使來倭偏千國外封山帝并昇明昔曰朝東武毛沢王田祖米粁自血表遠釦零頁｡｢｣ｦｧｨｩｪｫｬｭｮｯｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ"
+    const Japanese = "!#%()*+0123456789=?§@[]^_{|}~ŋɕɯɲɸʑ∞あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわゑをㇰㇱㇲㇳㇴㇵㇶㇷㇸㇹㇺㇻㇼㇽㇾㇿ上二于作使來倭偏千國外封山帝并昇明昔曰朝東武毛沢王田祖米粁自血表遠釦零頁｡｢｣ｦｧｨｩｪｫｬｭｮｯｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ"
+    const Ukraine = "!#%&()*+0123456789=?§@АаБбВвГгҐґДдЕеЄєЖЖЗзИиІіЇїЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЬьЮюЯя"
+    // i.e. Base129
+    const American = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+    // i.e. Base64
+    const HexCset = "0123456789ABCDEF"
+    const Binary = "01010101010101010101010101010101010101010101010101010101012" // robot prayer encoding
 
-    let charset: string = FullCset
+    let charset: string = MovieCharset
     // const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890?!"
 
     // const charset = "12345678"
@@ -48,23 +52,36 @@ export function getMatrixRain(wrapper: HTMLDivElement, initArg?: string, streams
 
     async function init() {
         switch (initArg?.toLowerCase()) {
+            case "-f":
+            case "--full":
+                charset = Base256
+                break
+            case "-h":
             case "--hex":
                 charset = HexCset
                 break
+            case "-a":
             case "--ascii":
             case "--american":
                 charset = American
                 break
-            case "--nihon":
-            case "--nippon":
-            case "--japan":
+            case "-n":
+            case "-j":
+            case "--nihongo":
+            case "--japanese":
                 charset = Japanese
                 break
+            case "-b":
             case "--binary":
                 charset = Binary
                 break
+            case "-u":
+            case "--ukraine":
+                charset = Ukraine
+                break
             default:
-                charset = FullCset
+                matrixWrapper.classList.add("mirrored")
+                charset = MovieCharset
         }
 
         if (elBuffers.length < 1) {
@@ -185,14 +202,24 @@ export function getMatrixRain(wrapper: HTMLDivElement, initArg?: string, streams
             case "KeyA":
                 charset = American
                 break
+            case "KeyU":
+                charset = Ukraine
+                break
 
             case "KeyN":
             case "KeyJ":
                 charset = Japanese
                 break
+            case "KeyM":
+                matrixWrapper.classList.toggle("mirrored")
+                break
 
             case "KeyD":
-                charset = FullCset
+                charset = MovieCharset
+                break
+
+            case "KeyF":
+                charset = Base256
                 break
 
             case "ArrowUp":

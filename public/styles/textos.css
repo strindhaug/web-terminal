@@ -350,6 +350,8 @@ body.fullscreen .crt {
   position: absolute;
   top: 0;
   left: 50%;
+  width: 2em;
+  text-align: center;
   /* outline: 1px solid pink; */
 
   display: flex;
@@ -394,6 +396,10 @@ body.fullscreen .crt {
   overflow: visible;
   opacity: 0;
 }
+.matrix-terminal.mirrored .matrix-el{
+  transform: scale(-1, 1);
+}
+
 .matrix-el--flash {
   opacity: 1;
   color: var(--ansi-BrightWhite);
