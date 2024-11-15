@@ -332,7 +332,7 @@ body.fullscreen .crt {
 }
 .matrix-terminal {
     font-family: "M PLUS 1 Code", monospace;
-    font-size: 75%;
+    font-size: 2.4vh;
     position: absolute;
     top: 0;
     left: 0;
@@ -348,8 +348,9 @@ body.fullscreen .crt {
 }
 .matrix-col {
   position: absolute;
-  top: 0;
+  top: 50%;
   left: 50%;
+  margin-top: -21em;
   width: 2em;
   text-align: center;
   /* outline: 1px solid pink; */
@@ -366,25 +367,21 @@ body.fullscreen .crt {
 @keyframes matrixZoom {
   0% {
     opacity: 0;
-    transform: translateX(0vw);
-    zoom: 0.9;
+    transform: translateX(0vw) scale(0.9);
   }
   5% {
     opacity: 1;
-    transform: translateX(0vw);
-    zoom: 0.9;
+    transform: translateX(0vw) scale(0.9);
   }
 
   95% {
     opacity: 1;
-    transform: translateX(var(--parallax));
-    zoom: 1.2;
+    transform: translateX(var(--parallax)) scale(1.2);
   }
 
   100% {
     opacity: 0;
-    transform: translateX(var(--parallax));
-    zoom: 1.2;
+    transform: translateX(var(--parallax)) scale(1.2);
   }
 }
 
@@ -396,10 +393,20 @@ body.fullscreen .crt {
   overflow: visible;
   opacity: 0;
 }
+
+.matrix-el.blip0,
 .matrix-terminal.mirrored .matrix-el{
-  transform: scale(-1, 1);
+  transform: scale(-1, 1); /* reversed */
+}
+.matrix-terminal.mirrored .matrix-el.blip0{
+  transform: scale(1, 1); /* unreverse */
 }
 
+.matrix-el.blip1 {
+  transform: scale(1, -1); /* upside down? */
+}
+
+.matrix-el.fixed,
 .matrix-el--flash {
   opacity: 1;
   color: var(--ansi-BrightWhite);
@@ -407,7 +414,13 @@ body.fullscreen .crt {
 }
 .matrix-el--glow {
     animation: afterglow 2.5s linear;
-
+}
+.matrix-el.fixed {
+  animation: none !important;
+  transform: none !important;
+  opacity: 1;
+  color: var(--ansi-BrightWhite);
+  text-shadow: 0 0 1em var(--ansi-BrightCyan);
 }
 
 
@@ -424,7 +437,7 @@ body.fullscreen .crt {
   }
 
   80% {
-    opacity: 0.1;
+    opacity: 0.3;
   }
 
   100% {

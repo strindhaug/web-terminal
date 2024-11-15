@@ -41,3 +41,12 @@ Build a prod build
 ```sh
 pnpm build
 ```
+
+
+## TODOs
+
+## Broadcast messages
+- Implement "real" broadcast messages. Should display as some kind of overlay inside subapps
+- Implement 10 second before reboot warning "Please save your work" or something
+
+## Better tab completion

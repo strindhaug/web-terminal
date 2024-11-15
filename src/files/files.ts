@@ -13,7 +13,7 @@ SYNOPSIS
         With no options this will emulate the look of the movie
         as closely as possible with mirrored katakana and numbers.
 
-    matrix [-abfhjnu]
+    matrix [-abfghjnu]
         See the OPTIONS section for details and
         alternate option syntax with long option names.
 
@@ -54,6 +54,7 @@ COMMANDS
     U    Ukraine
     H    Hexadecimal
     B    Binary
+    G    Glitch
 
     D    Default movie charset
     M    Toggle letter mirroring
@@ -65,12 +66,12 @@ OPTIONS
     These are the command line options available. All these options can
     be changed during runtime with the commands above.
     (no options)
-        Original The Matrix encoding with a small set of mirrored half
+        Original "The Matrix" encoding with a small set of mirrored half
         width katakana characters (and one kanji) and arabic numerals and
         the letter Z and ç and some punctuation.
 
     -f  or  --full
-        full encoding: uses a character set consisting of several symbols
+        Full encoding: uses a character set consisting of several symbols
         letters and numbers mainly from Latin scripts and Japanese. Note
         the symbols themselves are actually not meaningful, it's just
         arbitrary symbols chosen by the Japanese developers as symbols in
@@ -98,6 +99,10 @@ OPTIONS
 
     -u  or  --ukraine
         Ukraine cyrillic
+
+    -g  or  --glitch
+        Glitchy
+
 `
 
 const manPages: { [key: string]: ManPageData } = {

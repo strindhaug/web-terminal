@@ -73,7 +73,7 @@ export interface SubProgram {
 }
 
 export function makeCommandHistory(maxLen: number = 10) {
-    const stack: string[] = []
+    const stack: string[] = ["matrix -b"]
     let ptr = -1
     let currInput = ""
 
@@ -252,6 +252,9 @@ export function getTerminalPrompt(promptEl: HTMLInputElement, llBuf: LowLevelScr
     }
 
     async function completeShutdown() {
+        while (runningApps.length > 0) {
+            await stopSubProgram()
+        }
         await writeLine(`Broadcast message from root (pts/0) (${new Date().toUTCString()}):\n\n`, true, OutputSlowness.Chars)
         await writeLine("The system is going to shut down NOW!\n", true, OutputSlowness.Chars)
         await pause(0.5)
@@ -353,7 +356,8 @@ bye [time]      alias for shutdown`
                 await writeLine("Follow the white rabbit...", false)
                 await handleReturn()
                 await pause()
-                await startSubProgram(getMatrixRain(graphicalAppWrapper, args[1]))
+                await startSubProgram(getMatrixRain(graphicalAppWrapper, rawCommand))
+
                 return // don't sync input
             case "pager":
                 {
